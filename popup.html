@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox Theme Selector</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Removed external Google Font to avoid loading issues inside the extension -->
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: Arial, sans-serif; /* Fallback font to ensure text is visible */
             margin: 0;
             padding: 0;
             background-color: #f4f4f9;
@@ -64,7 +64,6 @@
             color: #aaa;
         }
 
-        /* Small utility class for visual design */
         .active-theme {
             background-color: #007bff !important;
             color: #fff !important;
@@ -77,7 +76,10 @@
     </header>
 
     <div class="content">
-        <ul id="theme-list" class="theme-list"></ul>
+        <ul id="theme-list" class="theme-list">
+            <!-- Fallback text in case themes don't load -->
+            <li>Loading themes...</li>
+        </ul>
     </div>
 
     <footer>
@@ -85,16 +87,20 @@
     </footer>
 
     <script>
+        // Make sure the script works even if there is no saved data
         const themes = [
           { name: "Dark Mode" }, 
           { name: "Light Mode" }, 
           { name: "Ocean Blue" },
           { name: "Forest Green" }, 
-          { name: "Sunset Orange" },
-          // Voeg nog meer thema's toe zoals gewenst
+          { name: "Sunset Orange" }
+          // Add more themes as needed
         ];
 
         const themeList = document.getElementById('theme-list');
+
+        // Clear the initial loading text
+        themeList.innerHTML = '';
 
         // Generate the theme list dynamically
         themes.forEach(theme => {
