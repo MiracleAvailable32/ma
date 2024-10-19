@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roblox Theme Selector</title>
-    <!-- Removed external Google Font to avoid loading issues inside the extension -->
     <style>
         body {
-            font-family: Arial, sans-serif; /* Fallback font to ensure text is visible */
+            font-family: Arial, sans-serif; /* Fallback font */
             margin: 0;
             padding: 0;
             background-color: #f4f4f9;
@@ -77,7 +76,6 @@
 
     <div class="content">
         <ul id="theme-list" class="theme-list">
-            <!-- Fallback text in case themes don't load -->
             <li>Loading themes...</li>
         </ul>
     </div>
@@ -86,43 +84,7 @@
         <p>&copy; 2024 Roblox Theme Switcher</p>
     </footer>
 
-    <script>
-        // Make sure the script works even if there is no saved data
-        const themes = [
-          { name: "Dark Mode" }, 
-          { name: "Light Mode" }, 
-          { name: "Ocean Blue" },
-          { name: "Forest Green" }, 
-          { name: "Sunset Orange" }
-          // Add more themes as needed
-        ];
-
-        const themeList = document.getElementById('theme-list');
-
-        // Clear the initial loading text
-        themeList.innerHTML = '';
-
-        // Generate the theme list dynamically
-        themes.forEach(theme => {
-            const li = document.createElement('li');
-            li.textContent = theme.name;
-            li.onclick = () => {
-                // Save the selected theme and visually mark it as active
-                chrome.storage.sync.set({ theme: theme.name });
-                document.querySelectorAll('.theme-list li').forEach(el => el.classList.remove('active-theme'));
-                li.classList.add('active-theme');
-            };
-            themeList.appendChild(li);
-        });
-
-        // Set the currently selected theme as active when loaded
-        chrome.storage.sync.get('theme', (data) => {
-            const activeTheme = data.theme;
-            if (activeTheme) {
-                const activeLi = Array.from(document.querySelectorAll('.theme-list li')).find(li => li.textContent === activeTheme);
-                if (activeLi) activeLi.classList.add('active-theme');
-            }
-        });
-    </script>
+    <!-- Link to the external script file -->
+    <script src="popup.js"></script>
 </body>
 </html>
