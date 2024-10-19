@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Theme Selector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            width: 300px;
+            min-height: 350px;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .theme-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .theme-list li {
+            padding: 10px;
+            margin: 8px 0;
+            background-color: #f0f0f5;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .theme-list li:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* Small utility class for visual design */
+        .active-theme {
+            background-color: #007bff !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Select Your Roblox Theme</h1>
+    </header>
+
+    <div class="content">
+        <ul id="theme-list" class="theme-list"></ul>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Roblox Theme Switcher</p>
+    </footer>
+
+    <script>
+        const themes = [
+          { name: "Dark Mode" }, 
+          { name: "Light Mode" }, 
+          { name: "Ocean Blue" },
+          { name: "Forest Green" }, 
+          { name: "Sunset Orange" },
+          // Voeg nog meer thema's toe zoals gewenst
+        ];
+
+        const themeList = document.getElementById('theme-list');
+
+        // Generate the theme list dynamically
+        themes.forEach(theme => {
+            const li = document.createElement('li');
+            li.textContent = theme.name;
+            li.onclick = () => {
+                // Save the selected theme and visually mark it as active
+                chrome.storage.sync.set({ theme: theme.name });
+                document.querySelectorAll('.theme-list li').forEach(el => el.classList.remove('active-theme'));
+                li.classList.add('active-theme');
+            };
+            themeList.appendChild(li);
+        });
+
+        // Set the currently selected theme as active when loaded
+        chrome.storage.sync.get('theme', (data) => {
+            const activeTheme = data.theme;
+            if (activeTheme) {
+                const activeLi = Array.from(document.querySelectorAll('.theme-list li')).find(li => li.textContent === activeTheme);
+                if (activeLi) activeLi.classList.add('active-theme');
+            }
+        });
+    </script>
+</body>
+</html>
